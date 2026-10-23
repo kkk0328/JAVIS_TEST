@@ -1,0 +1,13 @@
+{
+  "name": "jarvis",
+  "version": "0.1.0",
+  "description": "음성으로 로컬 Claude Code를 실행하는 데스크탑 비서",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^45.0.0"
+  }
+}

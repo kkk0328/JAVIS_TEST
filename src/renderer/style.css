@@ -1,0 +1,147 @@
+:root {
+  --bg: #03060c;
+  --fg: #d8f6ff;
+  --dim: rgba(170, 220, 240, 0.55);
+  --accent: #45e3ff;
+  --line: rgba(69, 227, 255, 0.18);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Segoe UI", "Malgun Gothic", sans-serif;
+  user-select: none;
+}
+
+#viz { position: fixed; inset: 0; display: block; }
+
+.titlebar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px 0 18px;
+  -webkit-app-region: drag;
+  z-index: 2;
+}
+.brand {
+  font-size: 12px;
+  letter-spacing: 0.5em;
+  color: var(--accent);
+  text-shadow: 0 0 10px rgba(69, 227, 255, 0.7);
+}
+.sys { margin-left: 18px; display: flex; gap: 14px; font-size: 10px; letter-spacing: 0.2em; color: var(--dim); }
+.dot::before {
+  content: "";
+  display: inline-block;
+  width: 6px; height: 6px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: #555;
+  vertical-align: 1px;
+}
+.dot.ok::before { background: #3dffb0; box-shadow: 0 0 8px #3dffb0; }
+.dot.wait::before { background: #ffc94d; box-shadow: 0 0 8px #ffc94d; animation: blink 1s infinite; }
+.dot.bad::before { background: #ff5a5a; box-shadow: 0 0 8px #ff5a5a; }
+@keyframes blink { 50% { opacity: 0.3; } }
+
+.winbtns { margin-left: auto; display: flex; -webkit-app-region: no-drag; }
+.winbtns button {
+  width: 40px; height: 30px;
+  border: 0;
+  background: transparent;
+  color: var(--dim);
+  font-size: 13px;
+  cursor: pointer;
+}
+.winbtns button:hover { color: var(--fg); background: rgba(255, 255, 255, 0.06); }
+#btnClose:hover { background: rgba(255, 70, 70, 0.6); }
+
+.hud {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.status {
+  position: absolute;
+  top: calc(43% + min(16vw, 16vh) * 1.75 + 14px);
+  text-align: center;
+  transform: translateY(-50%);
+}
+.status-label {
+  font-size: 13px;
+  font-weight: 300;
+  letter-spacing: 0.6em;
+  margin-right: -0.6em;
+  color: var(--accent);
+  text-shadow: 0 0 12px rgba(69, 227, 255, 0.8);
+  transition: color 0.4s;
+}
+.status-hint { margin-top: 6px; font-size: 12px; color: var(--dim); }
+
+body[data-state="processing"] .status-label { color: #c18bff; text-shadow: 0 0 12px rgba(180, 120, 255, 0.8); }
+body[data-state="error"] .status-label { color: #ff7a7a; text-shadow: 0 0 12px rgba(255, 90, 90, 0.8); }
+
+.dialog {
+  position: absolute;
+  bottom: 70px;
+  width: min(760px, 88vw);
+  text-align: center;
+}
+.line {
+  min-height: 1.4em;
+  line-height: 1.5;
+  transition: opacity 0.4s;
+}
+.line.user { font-size: 15px; color: var(--dim); font-style: italic; }
+.line.user:not(:empty)::before { content: "“"; }
+.line.user:not(:empty)::after { content: "”"; }
+.line.user.ignored { opacity: 0.35; }
+.line.jarvis {
+  margin-top: 6px;
+  font-size: 18px;
+  color: var(--fg);
+  text-shadow: 0 0 14px rgba(69, 227, 255, 0.35);
+}
+.tools {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  font-family: Consolas, "Cascadia Mono", monospace;
+  font-size: 11px;
+  color: rgba(150, 200, 230, 0.55);
+}
+.tools li { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tools li::before { content: "▸ "; color: var(--accent); }
+
+.command {
+  position: absolute;
+  bottom: 18px;
+  width: min(560px, 80vw);
+  pointer-events: auto;
+}
+.command input {
+  width: 100%;
+  padding: 9px 16px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: rgba(5, 15, 25, 0.6);
+  color: var(--fg);
+  font-size: 13px;
+  outline: none;
+  text-align: center;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.command input::placeholder { color: rgba(170, 220, 240, 0.35); }
+.command input:focus { border-color: rgba(69, 227, 255, 0.55); box-shadow: 0 0 16px rgba(69, 227, 255, 0.2); }

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'" />
+  <title>J.A.R.V.I.S.</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="viz"></canvas>
+
+  <header class="titlebar">
+    <div class="brand">J.A.R.V.I.S.</div>
+    <div class="sys" id="sys">
+      <span id="sysStt" class="dot">STT</span>
+      <span id="sysClaude" class="dot">CLAUDE</span>
+    </div>
+    <div class="winbtns">
+      <button id="btnMin" title="최소화">&#8211;</button>
+      <button id="btnClose" title="닫기">&#10005;</button>
+    </div>
+  </header>
+
+  <main class="hud">
+    <div class="status">
+      <div class="status-label" id="statusLabel">INITIALIZING</div>
+      <div class="status-hint" id="statusHint">시스템을 준비하고 있습니다</div>
+    </div>
+
+    <section class="dialog">
+      <div class="line user" id="userLine"></div>
+      <div class="line jarvis" id="jarvisLine"></div>
+      <ul class="tools" id="toolLog"></ul>
+    </section>
+
+    <form class="command" id="cmdForm" autocomplete="off">
+      <input id="cmdInput" placeholder="명령을 입력하거나 &quot;자비스&quot;라고 불러주세요  ·  Esc 중단" />
+    </form>
+  </main>
+
+  <script src="audio.js"></script>
+  <script src="tts.js"></script>
+  <script src="visualizer.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
