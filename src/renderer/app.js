@@ -56,10 +56,16 @@ const LABELS = {
   error: ['ERROR', ''],
 };
 
+let lastGeckoState = null;
+
 function render() {
   const s = displayState();
   viz.setState(s);
   document.body.dataset.state = s;
+  if (s !== lastGeckoState) {
+    lastGeckoState = s;
+    window.jarvis.geckoState(s);
+  }
   const [label, hint] = LABELS[s];
   $('statusLabel').textContent = label;
   $('statusHint').textContent = s === 'error' ? app.error : (s === 'idle' && !app.awake && app.speechActive ? '' : hint);

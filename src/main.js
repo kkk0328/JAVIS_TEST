@@ -87,6 +87,28 @@ ipcMain.on('claude:run', (_e, text) => {
 
 ipcMain.on('claude:cancel', () => claude.cancel());
 
+// ---------- 게코(데스크탑 펫) 연동 ----------
+// 게코 앱이 켜져 있으면 자비스 상태와 링 위치를 알려 준다. 꺼져 있으면 조용히 무시한다.
+let uiState = 'booting';
+
+function notifyGecko() {
+  if (!config.geckoUrl || !win || win.isDestroyed()) return;
+  const b = win.getContentBounds();
+  // 링 위치는 visualizer.js 의 _draw() 와 같은 비율 (cx = w/2, cy = h*0.43, R = min(w,h)*0.16)
+  const ring = { x: b.x + b.width / 2, y: b.y + b.height * 0.43, r: Math.min(b.width, b.height) * 0.16 };
+  fetch(`${config.geckoUrl}/jarvis`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ state: uiState, visible: win.isVisible() && !win.isMinimized(), bounds: b, ring }),
+    signal: AbortSignal.timeout(500),
+  }).catch(() => {});
+}
+
+ipcMain.on('gecko:state', (_e, s) => {
+  uiState = s;
+  notifyGecko();
+});
+
 ipcMain.on('win:minimize', () => win && win.minimize());
 ipcMain.on('win:close', () => win && win.close());
 
@@ -109,6 +131,9 @@ function createWindow() {
     },
   });
   win.loadFile(path.join(__dirname, 'renderer', 'index.html'));
+  for (const ev of ['move', 'resize', 'minimize', 'restore', 'show', 'hide']) win.on(ev, notifyGecko);
+  // 게코가 나중에 켜져도 알 수 있게 주기적으로 보낸다
+  setInterval(notifyGecko, 2000);
 
   // 디버그: JARVIS_CAPTURE=파일경로 로 실행하면 몇 초 간격으로 화면을 저장한다
   if (process.env.JARVIS_CAPTURE) {

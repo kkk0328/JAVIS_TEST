@@ -8,5 +8,6 @@
   "allowedTools": ["Bash", "PowerShell", "Read", "Glob", "Grep", "WebSearch", "WebFetch"],
   "sessionIdleMinutes": 10,
   "ttsRate": 1.05,
-  "hotkey": "CommandOrControl+Shift+J"
+  "hotkey": "CommandOrControl+Shift+J",
+  "geckoUrl": "http://127.0.0.1:47321"
 }

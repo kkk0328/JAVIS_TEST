@@ -12,4 +12,5 @@ contextBridge.exposeInMainWorld('jarvis', {
   onSttStatus: (cb) => ipcRenderer.on('stt:status', (_e, s) => cb(s)),
   onClaudeEvent: (cb) => ipcRenderer.on('claude:event', (_e, ev) => cb(ev)),
   onWake: (cb) => ipcRenderer.on('jarvis:wake', () => cb()),
+  geckoState: (s) => ipcRenderer.send('gecko:state', s),
 });
